@@ -79,6 +79,38 @@ $(document).ready(function () {
                 }
 
                 cityUVIndex.append(uvSpan);
+            });
+        
+        // Call 5 day forecase
+        let forecastQueryUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${currentLat}&lon=${currentLong}&exclude=current,minutely,hourly&appid=77672c68786de792de20e4e44617bd62`;
+        
+        $.ajax({
+            url: forecastQueryUrl,
+            method: "GET"
+        })
+            .then(function (response) {
+                $(".card-day").each(function (day) {
+                    day = day + 1;
+
+                    let cardDateMoment = moment.unix(response.daily[day].dt).format
+                    ("MM/DD/YYYY");
+
+                    let weatherCardIcon = response.daily[day].weather[0].icon;
+                    let weatherCardIconURL = `https://openweathermap.org/img/wn/${weatherCardIcon}.png`;
+                    let weatherCardIconDesc = response.daily[day].weather[0].format.description;
+                    
+                    let cardTempF = (response.daily[day].temp.day - 273.15) * 1.80 + 32;
+
+                    let cardHumidity = response.daily[day].humidity;
+
+                    $($(this)[0].children[0].children[0]).text(cardDateMoment);
+
+                    $($(this)[0].children[0].children[1].children[0]).attr("src", weatherCardIconURL).attr("alt", `${weatherCardIconDesc}`).attr("title", `${weatherCardIconDesc}`);
+
+                    $($(this)[0].children[0].children[2]).text(`Temp: ${cardTempF.toFixed(2)} ℉`);
+
+                    $($(this)[0].children[0].children[3]).text(`Humidity:${cardHumidity}%`);
+                });
             })
-    }
+    };
 })
