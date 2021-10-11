@@ -1,0 +1,81 @@
+* {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+div.container-fluid {
+    flex: 1 0 auto;
+}
+
+.jumbotron {
+    text-align: center;
+    background-color: #28527a;
+    color: white;
+    border-radius: 0;
+    border-bottom: 15px solid #3e83a8;
+    padding: 32px 16px;
+    margin: 0 0 20px 0;
+}
+
+/*Aside*/
+
+.aside-col {
+    background-color: white;
+    height: auto;
+}
+
+.btn {
+    background-color: #3e83a8;
+    border: none;
+}
+
+.btn:hover {
+    background-color: #28527a;
+}
+
+.btn:checked {
+    background-color: #28527a;
+}
+
+#search-term {
+    height: 55px;
+    font-size: 20px;
+}
+
+/* UV color code */
+
+.green {
+    background-color: green;
+    color: white;
+    border-radius: 5px;
+}
+
+.yellow {
+    background-color: yellow;
+    border-radius: 5px;
+}
+
+.orange {
+    background-color: orange;
+    border-radius: 5px;
+}
+
+.red {
+    background-color: red;
+    color: white;
+    border-radius: 5px;
+}
+
+.black {
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+}
+
+.card {
+    background-color: #8ac4d0;
+}

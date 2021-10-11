@@ -108,7 +108,7 @@ $(document).ready(function () {
 
                     $($(this)[0].children[0].children[2]).text(`Temp: ${cardTempF.toFixed(2)} ℉`);
 
-                    $($(this)[0].children[0].children[3]).text(`Humidity:${cardHumidity}%`);
+                    $($(this)[0].children[0].children[3]).text(`Humidity: ${cardHumidity}%`);
                 });
             })
     };
