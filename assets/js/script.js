@@ -92,12 +92,11 @@ $(document).ready(function () {
                 $(".card-day").each(function (day) {
                     day = day + 1;
 
-                    let cardDateMoment = moment.unix(response.daily[day].dt).format
-                    ("MM/DD/YYYY");
+                    let cardDateMoment = moment.unix(response.daily[day].dt).format("MM/DD/YYYY");
 
                     let weatherCardIcon = response.daily[day].weather[0].icon;
                     let weatherCardIconURL = `https://openweathermap.org/img/wn/${weatherCardIcon}.png`;
-                    let weatherCardIconDesc = response.daily[day].weather[0].format.description;
+                    let weatherCardIconDesc = response.daily[day].weather[0].description;
                     
                     let cardTempF = (response.daily[day].temp.day - 273.15) * 1.80 + 32;
 
@@ -113,4 +112,77 @@ $(document).ready(function () {
                 });
             })
     };
-})
+
+    // locally store past searches
+    function storeSearchTerms(searchedCity) {
+        localStorage.setItem("city" + localStorage.length, searchedCity);
+    }
+
+    // Display past searches as clickable buttons
+    let storedSearchList = "";
+    function displaySearchTerms() {
+        pastSearch.empty();
+
+        for (let i=0; i < localStorage.length; i++) {
+            storedSearchList = localStorage.getItem("city" + i);
+            let pastSearchBtn = $("<button>").text(storedSearchList).addClass("btn btn-primary button-srch m-2").attr("type", "submit");
+            pastSearch.append(pastSearchBtn);    
+        }
+    }
+
+    // Event listeners
+
+    searchBtn.on("click", function(event) {
+        event.preventDefault();
+        storeSearchTerms(searchTerm[0].value.trim());
+        displaySearchTerms();
+
+        let queryURL = buildCurrentQueryURL();
+
+        $.ajax({
+            url: queryURL,
+            metohd: "GET"
+        })
+            .then(updateCurrentWeather);
+    });
+
+    $(document).on("click", ".button-srch", function () {
+        let pastCity = $(this).text();
+
+        storeSearchTerms(pastCity);
+
+        $.ajax({
+            url: `https://api.openweathermap.org/data/2.5/weather?appid=77672c68786de792de20e4e44617bd62&q=${pastCity}`,
+            method: "GET"
+        })
+            .then(updateCurrentWeather);
+    });
+
+    // Clear past searches function
+    clearBtn.on("click", function() {
+        localStorage.clear();
+        pastSearch.empty();
+        location.reload();
+    });
+
+    // Default city
+    $( document ).ready(function() {
+        
+        displaySearchTerms();
+
+        let pastCity = localStorage.getItem("city" + (localStorage.length -1));
+
+        let qurl = "";
+
+        if (localStorage.length === 0) {
+            qurl = "https://api.openweathermap.org/data/2.5/weather?appid=77672c68786de792de20e4e44617bd62&q=Toronto";
+        } else {
+            qurl = `https://api.openweathermap.org/data/2.5/weather?appid=77672c68786de792de20e4e44617bd62&q=${pastCity}`;
+        }
+        $.ajax({
+            url: qurl,
+            method: "GET"
+        })
+            .then(updateCurrentWeather);
+    });
+});
